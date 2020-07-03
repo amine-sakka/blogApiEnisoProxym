@@ -69,7 +69,7 @@ public class User {
 	private List <Comment> comments;
 	/*@ManyToMany( mappedBy = "usersHowLikeThis",targetEntity=Article.class,fetch = FetchType.LAZY)
 	private Set <Article> favouriteArticles;*/
-	 
+	
 	@ManyToMany(fetch = FetchType.EAGER ,targetEntity = Article.class)
 	@JoinTable(name = "FAVOURITES", joinColumns = { @JoinColumn(name = "ARTICLE_ID") }, inverseJoinColumns = {
 	            @JoinColumn(name = "USER_ID") })

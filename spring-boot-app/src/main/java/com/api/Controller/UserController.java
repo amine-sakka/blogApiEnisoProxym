@@ -1,8 +1,11 @@
 package com.api.Controller;
 
+import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.api.Models.User;
 import com.api.Service.UserService;
@@ -35,8 +38,16 @@ public class UserController {
 			 		@RequestParam(defaultValue = "20",name="limit") Integer limit,
 			 		@RequestParam(defaultValue = "id" ,name="sort") String sortBy) 
 	{
-		ResponseEntity<List<User> > allUsersResponse = this.userService.getAllUsers(offset, limit, sortBy);
-		return allUsersResponse  ; 
+		
+		 
+		try {
+			List<User> allUsers = this.userService.getAllUsers(offset, limit, sortBy);
+			if(allUsers.isEmpty()) {{return new ResponseEntity<>(HttpStatus.NO_CONTENT);}}
+			ResponseEntity<List<User> > response =new ResponseEntity<>(allUsers,HttpStatus.OK);
+			return response ; 
+		} catch (Exception e) {
+			 return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+		}
 	}
 	
 
@@ -55,14 +66,22 @@ public class UserController {
 	
 	public ResponseEntity<Object> createUser(@RequestBody User user) {
 		
-
-		return this.userService.createUser(user);
+		try {
+			User savedUser =this.userService.createUser(user);
+			URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedUser.getId()).toUri();	
+			return ResponseEntity.created(location).build();
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+		}
 
 	}
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Object> updateUser(@RequestBody User user, @PathVariable long id) {
 
-		return this.userService.updateUser(user, id);
+		User updateUser= this.userService.updateUser(user, id);
+		return ResponseEntity.noContent().build();
 	}
+	
+		
 }

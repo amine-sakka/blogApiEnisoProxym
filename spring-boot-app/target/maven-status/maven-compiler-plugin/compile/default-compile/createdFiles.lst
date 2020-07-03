@@ -1,4 +1,5 @@
 com/api/Models/User.class
+com/api/SpringFoxConfig.class
 com/api/Repository/UserRepository.class
 com/api/Models/Comment.class
 com/api/Controller/ArticleController.class

@@ -1,4 +1,4 @@
-package com.api.Service;
+ package com.api.Service;
 
 import java.net.URI;
 import java.util.Date;
@@ -28,28 +28,14 @@ public class TagService {
 	}
 	
 	//get All
-	public ResponseEntity<List<Tag> >getAlltags(Integer offset, Integer limit, String sortBy)
+	public List<Tag> getAlltags(Integer offset, Integer limit, String sortBy)
 		{
-			/* this function return all the articles
-			 * filterd by 
-			 * 			offset the number of page
-			 * 			limit the number of tags in page
-			 * 			sort the colume that we will use to sort the tags
-			 * */
-		        
-			PageRequest pageable = PageRequest.of(offset, limit, Sort.by(sortBy));
-		   
-		    try {
-		    	List<Tag> allTags= this.tagRepository.findAll(pageable).getContent();
-		    	if(allTags.isEmpty()) {
-		    		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		    	}
-		    	return new ResponseEntity<List<Tag>>(allTags,HttpStatus.OK);
-				
-			} catch (Exception e) {
-				 return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
-			}
-		       
+		
+		   PageRequest pageable = PageRequest.of(offset, limit, Sort.by(sortBy));
+		   List<Tag> allTags= this.tagRepository.findAll(pageable).getContent();
+		   return allTags;
+		    	
+				  
 		}
 	//get one
 	public Tag retrieveTag(long id) {
@@ -67,36 +53,25 @@ public class TagService {
 	
 	
 	// crerate
-	public ResponseEntity<Object> createTag( Tag tag) {
-			/*this funcion creat article
-			 * it take arctice and save it to database
-			 * */
+	public Tag createTag( Tag tag) {
+			
 			Date now = new Date(0); 
 			tag.setCreatedAt(now);tag.setUpdatedAt(now);
 			Tag savedTag= this.tagRepository.save(tag);
 
-			URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-					.buildAndExpand(savedTag.getId()).toUri();
-
-			return ResponseEntity.created(location).build();
+			
+			return savedTag;
 
 		}
 	
 
 	//update
 	
-	public ResponseEntity<Object> updateTAg( Tag tag, long id) {
+	public  Optional<Tag> updateTAg( Tag tag, long id) {
 
 			Optional<Tag> tagOptional = this.tagRepository.findById(id);
-
-			if (!tagOptional.isPresent())
-				return ResponseEntity.notFound().build();
-
-			tag.setId(id);
-			
-			this.tagRepository.save(tag);
-
-			return ResponseEntity.noContent().build();
+			tag.setId(id);			
+			return tagOptional;
 		}
 		
 		

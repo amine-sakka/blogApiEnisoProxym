@@ -14,6 +14,7 @@ import com.api.Models.User;
 @Repository
 public interface ArticleRepository  extends JpaRepository<Article, Long> {
 
+	
 	List<Article> findByTitle(String title);
 	List<Article> findBySlug(String slug);
 	List< Article> findByAuthor(User author);

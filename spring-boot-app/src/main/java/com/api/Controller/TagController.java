@@ -1,8 +1,11 @@
 package com.api.Controller;
 
+import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.api.Models.Article;
 import com.api.Models.Tag;
@@ -36,8 +40,15 @@ public class TagController {
 			 		@RequestParam(defaultValue = "20",name="limit") Integer limit,
 			 		@RequestParam(defaultValue = "id" ,name="sort") String sortBy) 
 	{
-		ResponseEntity<List<Tag> > allTagsResponse = this.tagService.getAlltags(offset, limit, sortBy);
-		return allTagsResponse  ; 
+		try {
+			List<Tag> tags =this.tagService.getAlltags(offset, limit, sortBy);
+			if(tags.isEmpty()) {return new ResponseEntity<>(HttpStatus.NO_CONTENT);}
+			ResponseEntity<List<Tag> > response =new ResponseEntity<>(tags,HttpStatus.OK);
+			return response ;
+ 		} catch (Exception e) {
+ 			return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+		}
+		
 	}	
 	
 	
@@ -54,14 +65,21 @@ public class TagController {
 	
 	@PostMapping("/" )
 	public ResponseEntity<Object> createTag(@RequestBody Tag tag) {
-		return this.tagService.createTag(tag);
+		try {
+			Tag savedTag =this.tagService.createTag(tag);
+			URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedTag.getId()).toUri();	
+			return ResponseEntity.created(location).build();
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+		}
 
 	}
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Object> updateTag(@RequestBody Tag tag, @PathVariable long id) {
 
-		return this.tagService.updateTAg(tag, id);
+		Optional<Tag> updateTag= this.tagService.updateTAg(tag, id);
+		return ResponseEntity.noContent().build();
 	}
 
 
