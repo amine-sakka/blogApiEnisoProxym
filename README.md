@@ -19,7 +19,7 @@ git clone https://github.com/amine-sakka/blogApiEnisoProxym.git
 The app will start running at <http://localhost:8087>
 
 to check the Api Documentation go to   <http://localhost:8087/swagger-ui.html> 
-you will alse find exmples of requests and request bodys
+you will also find exmples of requests and request bodys
 
 ## Explore Rest APIs
 
