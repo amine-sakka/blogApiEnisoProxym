@@ -28,7 +28,7 @@ The app defines following CRUD APIs.
 
 
 ### Users
-| Method | Url | Description | Sample Valid Request Body |
+| Method | Url | Description |  Request Body |
 | ------ | --- | ----------- | ------------------------- |
 | GET    | /api/users/ | Get all users | |
 | GET    | /api/users/{userID} | Get a user | |
@@ -39,7 +39,7 @@ The app defines following CRUD APIs.
 
 ### Articles
 
-| Method | Url | Description | Sample Valid Request Body |
+| Method | Url | Description |  Request Body |
 | ------ | --- | ----------- | ------------------------- |
 | GET    | /api/articles/ | Get all articles | |
 | GET    | /api/articles/{articleID} | Get a article | |
@@ -51,7 +51,7 @@ The app defines following CRUD APIs.
 
 ### Tags
 
-| Method | Url | Description | Sample Valid Request Body |
+| Method | Url | Description |  Request Body |
 | ------ | --- | ----------- | ------------------------- |
 | GET    | /api/tags/ | Get all tags | |
 | GET    | /api/tags/{tagID} | Get a tag | |
@@ -61,7 +61,7 @@ The app defines following CRUD APIs.
 
 ### Comments
 
-| Method | Url | Description | Sample Valid Request Body |
+| Method | Url | Description |  Request Body |
 | ------ | --- | ----------- | ------------------------- |
 | GET    | /api/comments/ | Get all comments | |
 | GET    | /api/comments/{commentID} | Get a comment | |
@@ -71,4 +71,3 @@ The app defines following CRUD APIs.
 
 
 
-## Sample Valid JSON Request Bodys
